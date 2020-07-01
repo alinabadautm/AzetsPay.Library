@@ -6,5 +6,12 @@
 */
 {
   "files": [],
-  "references": []
+  "references": [
+    {
+      "path": "./projects/rule-component-library/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/rule-component-library/tsconfig.spec.json"
+    }
+]
 }

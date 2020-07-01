@@ -1,0 +1,74 @@
+<form class="form-inline form-cond-style small-margin-bottom">
+	<div class="form-group">
+		<div class="input-group">
+			<div [ngClass]="fieldDrop != undefined && fieldDrop.isOpen() ? ' selector selector--open selector--sm': 'selector selector--sm'" ngbDropdown #fieldDrop="ngbDropdown">
+				<input type="text" readonly class="selector__input selector__input--sm selector__trigger large-input condition-input" id="inputField{{newdata.no}}" name="field{{newdata.no}}" ngbDropdownAnchor
+					   autocomplete="off" placeholder="choose field.." (click)="fieldDrop.toggle()" [(ngModel)]="newdata.Field" />
+				<div class="selector__dropdown" ngbDropdownMenu style="position: static; float: left">
+					<ul class="selector__items" (click)="changeField($event)">
+						<li><a href="#" class="selector__item transaction-item selector__item--sm">Creditor organization number</a></li>
+						<li><a href="#" class="selector__item transaction-item selector__item--sm">Creditor bank country</a></li>
+						<li><a href="#" class="selector__item transaction-item selector__item--sm">Creditor bank account</a></li>
+						<li><a href="#" class="selector__item transaction-item selector__item--sm">Total amount</a></li>
+						<li><a href="#" class="selector__item transaction-item selector__item--sm">Amount to pay</a></li>
+						<li><a href="#" class="selector__item transaction-item selector__item--sm">Currency</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="form-group ml-2">
+		<div class="input-group">
+			<div [ngClass]="conditionDrop != undefined && conditionDrop.isOpen() ? ' selector selector--open selector--sm': 'selector selector--sm'" ngbDropdown #conditionDrop="ngbDropdown">
+				<input type="text" readonly [class]="(newdata.FieldCondition === 'Greater than maximum amount on creditor' ? ' extra-large ': '') + 'selector__input selector__input--sm selector__trigger mdm-input condition-input'" autocomplete="off" id="inputCondition{{newdata.no}}" name="condition{{newdata.no}}" ngbDropdownAnchor placeholder="choose condition.." (click)="conditionDrop.toggle()" [(ngModel)]="newdata.FieldCondition" />
+				<div class="selector__dropdown" ngbDropdownMenu style="position: static; float: left">
+					<ul class="selector__items" (click)="changeCondition($event)">
+						<li><a href="#" class="selector__item transaction-item selector__item--sm">=</a></li>
+						<li><a href="#" class="selector__item transaction-item selector__item--sm">!=</a></li>
+						<li *ngIf="isNumericField(newdata.Field)"><a href="#" class="selector__item transaction-item selector__item--sm"><</a></li>
+						<li *ngIf="isNumericField(newdata.Field)"><a href="#" class="selector__item transaction-item selector__item--sm"><=</a></li>
+						<li *ngIf="isNumericField(newdata.Field)"><a href="#" class="selector__item transaction-item selector__item--sm">></a></li>
+						<li *ngIf="isNumericField(newdata.Field)"><a href="#" class="selector__item transaction-item selector__item--sm">>=</a></li>
+						<li *ngIf="isNumericField(newdata.Field)"><a href="#" class="selector__item transaction-item selector__item--sm">Greater than maximum amount on creditor</a></li>
+						<li *ngIf="isTextField(newdata.Field)"><a href="#" class="selector__item transaction-item selector__item--sm">Contains</a></li>
+						<li *ngIf="isTextField(newdata.Field)"><a href="#" class="selector__item transaction-item selector__item--sm">Begins with</a></li>
+						<li *ngIf="isTextField(newdata.Field)"><a href="#" class="selector__item transaction-item selector__item--sm">Not contains</a></li>
+						<li *ngIf="newdata.Field === 'Creditor bank account'"><a href="#" class="selector__item transaction-item selector__item--sm">Not exists on creditor/client</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="form-group ml-2">
+		<div class="input-group values-group">
+
+			<input *ngIf="newdata.Blacklist === false && ['Creditor bank country','Currency'].includes(newdata.Field) === false && ['Not exists on creditor/client', 'Greater than maximum amount on creditor'].includes(newdata.FieldCondition) === false " type="text" autocomplete="off" class="form-control form-control-sm mdm-input" id="inputValues{{newdata.no}}" name="inputValues{{newdata.no}}" placeholder="values here.." [(ngModel)]="newdata.Values">
+			<ng-select *ngIf="newdata.Blacklist === false && newdata.Field === 'Creditor bank country'" placeholder="Select country.." name="countrySelection"
+					   [items]="countries"
+					   [(ngModel)]="countrySelection"
+					   bindLabel="Country"
+					   bindValue="CountryCode"
+					   [multiple]="true"
+					   (change)="changeCountry($event)">
+			</ng-select>
+			<ng-select *ngIf="newdata.Blacklist === false && newdata.Field === 'Currency'" placeholder="Select currency.." name="currencySelection"
+					   [items]="currencies"
+					   [(ngModel)]="currencySelection"
+					   bindLabel="CurrencyCode"
+					   bindValue="CurrencyCode"
+					   [multiple]="true"
+					   (change)="changeCurrency($event)">
+			</ng-select>
+			<div *ngIf="isBlacklistField(newdata.Field) && ['Not exists on creditor/client', 'Greater than maximum amount on creditor'].includes(newdata.FieldCondition) === false" class="check-blacklist">
+				<input class="custom-control-input" type="checkbox" id="blacklistCheck{{newdata.no}}" [checked]="newdata.Blacklist === true ? 'checked': ''" (change)="changeBlacklist($event)">
+				<label class="custom-control-label" for="blacklistCheck{{newdata.no}}">
+					Blacklist
+				</label>
+			</div>
+		</div>
+	</div>
+	
+	<button type="button" class="close delete-cond" aria-label="Delete" (click)="delete($event)">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</form>
