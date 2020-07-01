@@ -1,9 +1,9 @@
-﻿<div class="group-row">
+<div class="group-row">
 	<form class="form-inline form-cond-style">
 		<div class="form-group">
 			<div class="input-group">
-				<button type="button" [class]="newdata.operand === 'AND' ? 'btn btn-secondary btn-sm cond-button op-button' : 'btn btn-light btn-sm cond-button op-button'" (click)="clickOp($event)">AND</button>
-				<button type="button" [class]="newdata.operand === 'OR' ? 'btn btn-secondary btn-sm cond-button op-button' : 'btn btn-light btn-sm cond-button op-button'" (click)="clickOp($event)">OR</button>
+				<button type="button" [class]="newData.operand === 'AND' ? 'btn btn-secondary btn-sm cond-button op-button' : 'btn btn-light btn-sm cond-button op-button'" (click)="clickOp($event)">AND</button>
+				<button type="button" [class]="newData.operand === 'OR' ? 'btn btn-secondary btn-sm cond-button op-button' : 'btn btn-light btn-sm cond-button op-button'" (click)="clickOp($event)">OR</button>
 				<button type="button" class="btn-sm cond-button op-cond-button" (click)="addCondition($event)"><span class="freshicon freshicon-add-2"></span></button>
 				<button type="button" class="btn-sm cond-button op-cond-button" (click)="addGroup($event)"><span class="freshicon freshicon-add-directories"></span></button>
 			</div>

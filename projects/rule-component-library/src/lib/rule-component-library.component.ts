@@ -1,5 +1,4 @@
-import { Component, OnInit, NgModule } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, NgModule, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'lib-rule-component-library',
@@ -11,15 +10,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 			</div>
 		</div>
 
-	  <group-component #groupComponent [collection]="conditions" [newdata]="newData">
+	  <group-component #groupComponent [collection]="conditions" [newData]="newData" [fields]="fields">
 		</group-component>
   `,
   styleUrls: ['rule-styles.component.css'],
 })
 export class RuleComponent implements OnInit {
-
-  public newData;
-  public conditions = [];
+  
+  @Input() newData;
+  @Input() conditions;
+  @Input() fields;
 
   constructor() {
     if (this.conditions == null || this.conditions.length === 0) {
@@ -65,15 +65,7 @@ export class RuleComponent implements OnInit {
   }
 
   getBlacklistType(condition) {
-    switch (condition.Field) {
-      case 'Creditor bank country':
-        return 'Blacklist country';
-      case 'Creditor organization number':
-        return 'Blacklist organization number';
-      case 'Creditor bank account':
-        return 'Blacklist bank account';
-    }
-
+    return 'Blacklist ' + condition.Field;
   }
 
 

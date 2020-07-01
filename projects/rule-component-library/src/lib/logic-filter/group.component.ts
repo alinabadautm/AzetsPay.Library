@@ -7,10 +7,9 @@ import { group } from '@angular/animations';
     templateUrl: 'group.component.html',
 })
 export class GroupConditionComponent implements OnInit {
-    @Input() newdata;
+    @Input() newData;
     @Input() collection;
-    @Input() currencies;
-    @Input() countries;
+    @Input() fields;
     @Output("deleteGroup") deleteGroup: EventEmitter<any> = new EventEmitter();
 
 
@@ -24,7 +23,7 @@ export class GroupConditionComponent implements OnInit {
 
     initializeComponents() {
         if (this.collection != null) {
-            const children = this.collection.filter(data => data.parentGroup === this.newdata.no);
+          const children = this.collection.filter(data => data.parentGroup === this.newData.no);
             if (children.length > 0) {
                 for (let i = 0; i < children.length; i++) {
                     if (children[i].isCondition === false)
@@ -46,7 +45,7 @@ export class GroupConditionComponent implements OnInit {
         const newData = newChild == null? {
             no: this.collection.length > 0 ? max + 1 : 0,
             isCondition: true,
-            parentGroup: this.newdata.no,
+          parentGroup: this.newData.no,
             Field: "",
             FieldType: "",
             FieldCondition: "",
@@ -65,8 +64,7 @@ export class GroupConditionComponent implements OnInit {
         let self = this;
         ref.instance.collection = this.collection;
         ref.instance.newdata = newData;
-        ref.instance.countries = this.countries;
-        ref.instance.currencies = this.currencies;
+        ref.instance.fields = this.fields;
         ref.instance.deleteFunction.subscribe(val => {
             const index = ref.instance.collection.indexOf(ref.instance.newdata);
             if (index > -1) {
@@ -82,7 +80,7 @@ export class GroupConditionComponent implements OnInit {
         const newData = newChild == null ? {
             no: this.collection.length > 0 ? max + 1 : 0,
             isCondition: false,
-            parentGroup: this.newdata.no,
+          parentGroup: this.newData.no,
             operand: "AND"
         } : newChild;
         if (newChild == null)
@@ -91,8 +89,7 @@ export class GroupConditionComponent implements OnInit {
         let self = this;
         ref.instance.collection = this.collection;
         ref.instance.newdata = newData;
-        ref.instance.countries = this.countries;
-        ref.instance.currencies = this.currencies;
+        ref.instance.fields = this.fields;
         ref.instance.deleteGroup.subscribe(val => {
             let groupstodelete = [ref.instance.newdata.no];
             let i = 0;
@@ -129,7 +126,7 @@ export class GroupConditionComponent implements OnInit {
 
             btns[1].classList.remove('btn-light');
             btns[1].classList.add('btn-secondary');
-            this.newdata.operand = "OR";
+          this.newData.operand = "OR";
         }
         else {
             btns[1].classList.add('btn-light');
@@ -137,7 +134,7 @@ export class GroupConditionComponent implements OnInit {
 
             btns[0].classList.remove('btn-light');
             btns[0].classList.add('btn-secondary');
-            this.newdata.operand = "AND";
+          this.newData.operand = "AND";
         }
     }
 

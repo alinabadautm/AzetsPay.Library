@@ -6,10 +6,9 @@ import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 	  templateUrl: 'condition.component.html',    
 })
 export class FilterConditionComponent implements OnInit {
-	@Input() newdata;
+  @Input() newData;
 	@Input() collection;
-	@Input() currencies;
-	@Input() countries;
+	@Input() fields;
 	@Output("deleteFunction") deleteFunction: EventEmitter<any> = new EventEmitter();
 
 	@ViewChild("fieldDrop")
@@ -21,65 +20,48 @@ export class FilterConditionComponent implements OnInit {
 	public currencySelection;
 	public countrySelection;
 
-	constructor(public changeDetectorRef: ChangeDetectorRef) {
+  constructor(public changeDetectorRef: ChangeDetectorRef) {
+  }
 
-		
-    }
-	ngOnInit() {
-	}
+  ngOnInit() {
+  }
 
-	ngAfterViewInit() {
-		if (this.newdata != null) {
-			if (this.newdata.Field === "Creditor bank country") {
-				this.countrySelection = this.newdata.Values.split(",");
-			}
+  ngAfterViewInit() {
+  }
 
-			if (this.newdata.Field === "Currency") {
-				this.currencySelection = this.newdata.Values.split(",");
-			}
-		}
-	}
+  isNumericField(field) {
+    let fieldInArray = this.fields.filter(a => a.name === field);
+    return fieldInArray.length > 0 ? fieldInArray[0].type === "Numeric" : false;
+  }
 
-    isNumericField(field) {
-        return ["Amount to pay", "Total amount"].includes(field);
-    }
+  isTextField(field) {
+    let fieldInArray = this.fields.filter(a => a.name === field);
+    return fieldInArray.length > 0 ? fieldInArray[0].type === "Text" : true;
+  }
 
-    isTextField(field) {
-        return ["Creditor organization number", "Creditor bank country", "Creditor bank account", "Currency"].includes(field);
-	}
-
-	isBlacklistField(field) {
-		return ["Creditor organization number", "Creditor bank country", "Creditor bank account"].includes(field);
+  isBlacklistField(field) {
+    let fieldInArray = this.fields.filter(a => a.name === field);
+    return fieldInArray.length > 0 ? fieldInArray[0].blacklist === true : false;
 	}
 
 	changeField(e) {
-		this.newdata.Field = e.target.innerHTML;
-		this.newdata.Blacklist = false;
-		this.newdata.FieldType = this.isTextField(e.target.innerHTML) ? 'String' : this.isNumericField(e.target.innerHTML) ? 'Numeric' : 'Boolean';
+    this.newData.Field = e.target.innerHTML;
+    this.newData.Blacklist = false;
+    this.newData.FieldType = this.isTextField(e.target.innerHTML) ? 'String' : 'Numeric';
 		this.fieldDrop.toggle();
 		e.preventDefault();
 	}
 
-	changeCurrency(e) {
-		this.newdata.Values = e.map(a => a.CurrencyCode).join(",");
-	}
-
-	changeCountry(e) {
-		this.newdata.Values = e.map(a => a.CountryCode).join(",");
-	}
-	
-	changeBlacklist(e) {
-		this.newdata.Blacklist = e.target.checked;
-		if (e.target.checked === true && ["Creditor bank country", "Currency"].includes(this.newdata.Field) === false)
-			this.newdata.Values = "";
-		if (e.target.checked === true)
-			this.newdata.FieldCondition = '=';
-	}
+  changeBlacklist(e) {
+    this.newData.Blacklist = e.target.checked;
+    if (e.target.checked === true) {
+      this.newData.Values = "";
+      this.newData.FieldCondition = '=';
+    }
+  }
 
 	changeCondition(e) {
-		this.newdata.FieldCondition = e.target.textContent;
-		if (['Not exists on creditor/client', 'Greater than maximum amount on creditor'].includes(this.newdata.FieldCondition) === true)
-			this.newdata.Values = "";
+    this.newData.FieldCondition = e.target.textContent;
 		this.conditionDrop.toggle();
 		e.preventDefault();
 	}
